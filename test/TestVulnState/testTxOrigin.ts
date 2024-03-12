@@ -14,12 +14,14 @@ describe("TxOrigin Contract", function(){
     it("should be deployed correctly", async function() {
         const { TXO, acc1 } = await loadFixture(deployTxOrigin)
 
-        expect(await TXO.owner()).to.equal(acc1)
+        //@ts-ignore
+        expect(await TXO.owner()).to.equal(acc1.address)
     })
 
     it("Should not allow anyone other than owner of contract to call the function", async function () {
         const {TXO, acc2 } = await loadFixture(deployTxOrigin)
 
+        //@ts-ignore
         await expect(TXO.connect(acc2).sendTo(acc2, 100)).to.be.revertedWith("You are not the owner!")
     })
 })

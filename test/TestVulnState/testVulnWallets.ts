@@ -117,7 +117,7 @@ describe("Multiple Wallet Contracts", function() {
         })
     })
 
-    describe("New compiler wallet with wrong sign", function() {
+    describe("Naively Optimised Contract", function() {
         it("should have some funds by default ", async function() {
             const {newWrongSign, acc10} = await loadFixture(deployWallets)
             expect(await ethers.provider.getBalance(newWrongSign)).to.not.equal(0)
