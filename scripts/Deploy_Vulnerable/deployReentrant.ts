@@ -5,13 +5,11 @@ async function main(){
     const vuln = await ethers.deployContract("Vulnerable")
     await vuln.waitForDeployment()
 
-    const expl = await ethers.deployContract("Exploit")
-    await expl.waitForDeployment()
+    const [, acc2 , , , , , , acc8] = await ethers.getSigners()
 
-    const [, , , , , , , acc8] = await ethers.getSigners()
+    await acc2.sendTransaction({ to: vuln.target, value: ethers.parseEther("0.00001")})
 
-    await acc8.sendTransaction({ to: vuln.target, value: ethers.parseEther("1")})
-    
+    console.log(`Vulnerable Contract Deployed at : ${vuln.target}`)
 }
 
 main().catch((error) => {
