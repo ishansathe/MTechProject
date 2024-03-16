@@ -24,10 +24,10 @@ const config : HardhatUserConfig = {
   },
 
   networks : {
-    sepolia: {
-      url: process.env.ALCHEMY_SEPOLIA_ENDPOINT,
-      accounts : [acc1, acc2]
-    },
+    // sepolia: {
+    //   url: process.env.ALCHEMY_SEPOLIA_ENDPOINT,
+    //   accounts : [acc1, acc2]
+    // },
 
     hardhat : {
       gas : "auto",
