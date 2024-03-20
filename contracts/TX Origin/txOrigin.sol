@@ -20,9 +20,7 @@ contract txOrigin {
         require(tx.origin == owner, "You are not the owner!");
         receiver.transfer(amount);
     }
-
     receive() external payable {}
 
     fallback() external payable {}
-
 }
