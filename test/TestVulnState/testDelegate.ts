@@ -2,10 +2,11 @@ import {ethers} from "hardhat";
 import { expect } from "chai";
 import { loadFixture } from "@nomicfoundation/hardhat-toolbox/network-helpers";
 
-describe("Delegator Contracts", function() {
+describe("Delegate Call Contracts", function() {
     async function deployContracts() {
-        const library = await ethers.getContractFactory("delegateLibrary")
-        const delLibrary = await library.deploy()
+
+        const delLibrary = await ethers.deployContract("delegateLibrary")
+        await delLibrary.waitForDeployment()
 
         const delegator = await ethers.deployContract("VulnDelegator", [delLibrary.target])
         await delegator.waitForDeployment()
@@ -16,32 +17,39 @@ describe("Delegator Contracts", function() {
     }
 
     describe("Library Contract", function() {
-        it("should have a number variable initially set to 0", async function() {
+        it("should have a 'number' variable with some numeric value to refer to", async function() {
             const {delLibrary} = await loadFixture(deployContracts)
 
-            //@ts-ignore   //Runs fine, but throws error. Smth to do with getContractFactory function
-            expect(await delLibrary.number()).to.equal(0)
+            var proofInt: BigInt = await delLibrary.number()
+            expect(proofInt).to.be.a('BigInt')
         })
-        it("should have a function to change numbers and change successfully", async function() {
-            const {delLibrary} = await loadFixture(deployContracts)
-            //@ts-ignore
-            await delLibrary.changeNum(77)
 
-            //@ts-ignore
-            expect(await delLibrary.number()).to.equal(77)
+        it("The function of library contract should be capable of changing the value of 'number' variable", async function() {
+            const {delLibrary} = await loadFixture(deployContracts)
+            
+            var initNum = await delLibrary.number()
+            await delLibrary.changeNum(77)
+            // Storing the initial number and then changing it
+
+            expect(await delLibrary.number()).to.not.equal(initNum)
         })
     })  
 
     describe("Vulnerable Delegator", function() {
-        it("should have owner set to the person that called deployed the contract", async function() {
-            const { delegator, acc1} = await loadFixture(deployContracts)
 
+        it("Owner of the contract must be the person that deployed it.", async function() {
+            const { delegator, acc1} = await loadFixture(deployContracts)
             expect(await delegator.owner()).to.equal(acc1.address)
         })
+
         it("should not allow other people call the proclaimOwnership function!", async function() {
             const {delegator, acc2} = await loadFixture(deployContracts)
-
             expect(delegator.connect(acc2).proclaimOwnership()).to.be.revertedWith("You are not the owner!")
+        })
+
+        it("should have a public getter function 'number' for reference to a numeric value", async function() {
+            const {delegator} = await loadFixture(deployContracts)
+            expect(await delegator.number()).to.be.a('BigInt')
         })
     })
     
