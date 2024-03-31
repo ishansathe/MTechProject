@@ -1,6 +1,6 @@
 import { loadFixture } from "@nomicfoundation/hardhat-toolbox/network-helpers";
 import { expect } from "chai";
-import { ethers, network } from "hardhat";
+import { ethers } from "hardhat";
 
 async function deployWallets() {
     const [acc1, acc2, ,,,,,,,acc10] = await ethers.getSigners()
