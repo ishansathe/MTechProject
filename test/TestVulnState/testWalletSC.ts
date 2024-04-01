@@ -43,14 +43,31 @@ describe("Wallet Smart Contract 1", function () {
 
         expect(await WalletSC1.creator()).to.equal(acc1.address)
     })
+
+    it("Function 'migrateTo' is accessible and transfers the funds successfully", async function() {
+        const {WalletSC1, acc1, acc2} = await loadFixture(deployWallets)
+
+        await WalletSC1.initWallet()
+        var ogBalance = await ethers.provider.getBalance(acc2.address)
+        
+        await WalletSC1.migrateTo(acc2.address)
+        var newBalance = await ethers.provider.getBalance(acc2.address)
+
+        var compare : boolean = (ogBalance < newBalance) ? true : false
+        
+        expect(await ethers.provider.getBalance(WalletSC1.target)).to.equal(0)
+        expect(compare).to.equal(true)
+    })
 })
 
 describe("Wallet Smart Contract 2", function ()  {
-    it("should have some funds by default ", async function() {
-        const {WalletSC2} = await loadFixture(deployWallets)
 
-        expect(await ethers.provider.getBalance(WalletSC2)).to.not.equal(0)
-        // The statement for checking
+    it("Function 'migrateTo' is directly accessible to deployer of contract.", async function() {
+        const {WalletSC2, acc1} = await loadFixture(deployWallets)
+        
+        await WalletSC2.migrateTo(acc1)
+        expect(await ethers.provider.getBalance(WalletSC2.target)).to.equal(0)
+        // This is sensible because if not, this function would throw an error.
     })
 
     it("Should allow for deposit and value should be updated", async function() {
