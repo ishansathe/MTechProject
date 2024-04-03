@@ -13,7 +13,7 @@ async function deployAndStoreFunds() {
 
     return {vuln, acc1}
 }
-describe("Vulnerable Reentrant Contract", function() {
+describe("Fund distributor contract", function() {
     it("Should be deployed", async function() {
         const {vuln, acc1} = await loadFixture(deployAndStoreFunds)
 

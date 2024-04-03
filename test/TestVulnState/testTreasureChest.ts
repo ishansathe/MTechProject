@@ -2,7 +2,7 @@ import { loadFixture } from "@nomicfoundation/hardhat-toolbox/network-helpers"
 import { ethers } from "hardhat"
 import { expect } from "chai"
 
-describe ("Treasure Chest", function () {
+describe ("Treasure Chest Smart Contract", function () {
 
     async function deployTreasureChest() {
 
@@ -34,14 +34,14 @@ describe ("Treasure Chest", function () {
         expect (TC.closeChest()).to.be.revertedWithCustomError(TC, 'ChestAlreadyClosed')
     })
 
-    it("Once treasure is claimed, should revert with a message when trying to claim again", async function() {
+    it("Once treasure is claimed, should revert with a failure message when trying to claim again", async function() {
         const {TC, acc2} = await loadFixture(deployTreasureChest)
 
         await TC.connect(acc2).claimTreasure()
         expect (TC.connect(acc2).claimTreasure()).to.be.revertedWith("Treasure chest is either claimed or closed!")
     })
 
-    it("Once treasure is closed, should revert with a message when trying to claim", async function() {
+    it("Once treasure is closed, should revert with a failure message when trying to claim", async function() {
         const {TC, acc1, acc2} = await loadFixture(deployTreasureChest)
 
         await TC.connect(acc1).closeChest()

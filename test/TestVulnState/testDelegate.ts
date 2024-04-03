@@ -2,7 +2,7 @@ import {ethers} from "hardhat";
 import { expect } from "chai";
 import { loadFixture } from "@nomicfoundation/hardhat-toolbox/network-helpers";
 
-describe("Delegate Call Contracts", function() {
+describe("Delegate Call to Pseudo-Random Number Generator Library", function() {
     async function deployContracts() {
 
         const delLibrary = await ethers.deployContract("delegateLibrary")
@@ -16,7 +16,7 @@ describe("Delegate Call Contracts", function() {
         return {delLibrary, delegator, acc1, acc2}
     }
 
-    describe("Library Contract", function() {
+    describe("Pseudo Random Number Generator Library Contract", function() {
         it("should have a 'number' variable with some numeric value to refer to", async function() {
             const {delLibrary} = await loadFixture(deployContracts)
 
@@ -35,7 +35,7 @@ describe("Delegate Call Contracts", function() {
         })
     })  
 
-    describe("Vulnerable Delegator", function() {
+    describe("Numeric Reference Contract", function() {
 
         it("Owner of the contract must be the person that deployed it.", async function() {
             const { delegator, acc1} = await loadFixture(deployContracts)
